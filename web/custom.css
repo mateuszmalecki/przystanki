@@ -1,5 +1,9 @@
 body{
     font-family: Lato;
+    background: url("tlo.jpg");
+    font-family: Lato;
+    background-repeat-x: no-repeat;
+    background-size: cover;
 }
 
 .carousel-inner img.slideIMG{
