@@ -1,0 +1,120 @@
+{% extends "AppBundle::base.html.twig" %}
+{% block content %}
+<div class="container">
+    {% include 'AppBundle:Extra:flashMsg.html.twig' %}
+
+    <div class="well well-sm"><strong>Opis podstrony:</strong><br>
+    Wyświetlona została lista przystanków z bazy. Po rozwinięciu sekcji z przystankiem zostaje wywołana funkcja, która zmienia w bazie informacje o tym czy przystanek został poddany weryfikacji (odczytany) czy nie. Wykorzystano jQuery i AJAX. W przyszłości można dodać FOSUserBundle do logowania i rejestracji, ustawić zabezpieczenia w security.yml i nadać uprawnienia dla administratora.
+    </div>
+    <div class="titleSection">
+        <p>Panel administratora</p>
+    </div>
+    <div class="col-md-12 blueBox3">
+
+
+    <h2 class="titleBox">Lista przystanków</h2>
+    <div class="panel-group" id="accordion">
+
+        {% for station in stations %}
+            <div class="panel panel-default {% if station.isRead == false %}panel-info{% endif %}">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#station-{{ station.id }}" {% if station.isRead == false %}class="saveStationAsRead"{% endif %} data-stationId="{{ station.id }}">
+                            Przystanek numer {{ station.id }}</a>
+
+                        {% if station.isRead == false %}
+                            <span class="label label-danger pull-right">Do weryfikacji</span>
+                            {% elseif station.isRead == true %}
+                            <span class="label label-success pull-right">Zweryfikowany</span>
+                        {% endif %}
+
+
+                    </h4>
+
+
+
+                </div>
+                <div id="station-{{ station.id }}" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Tytuł</th>
+                                <th>Adres</th>
+                                <th>Opis</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ station.title }}</td>
+                                    <td>{{ station.address }}</td>
+                                    <td>{{ station.description }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalShouldSaveStationAsRead" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <p>Some text in the modal.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+{{ parent() }}
+
+    <script>
+        function saveStationAsRead(clickedStation) {
+            console.log(clickedStation);
+
+            var stationIdToSave = clickedStation.data('stationid');
+
+            clickedStation.next('span').html("Weryfikowany...").removeClass('label-danger').addClass('label-warning');
+
+            $.ajax({
+                type: "POST",
+                url: Routing.generate('_setStationAsRead'),
+                data: {
+                    stationId: stationIdToSave
+                },
+                dataType: "json",
+                success: function(response) {
+                    if(response.status == 'ok'){
+                        clickedStation.next('span').html("Zweryfikowany").removeClass('label-warning').addClass('label-success');
+                    }else{
+                        clickedStation.next('span').html("Wystąpił błąd!").removeClass('label-warning').addClass('label-danger');
+                    }
+                }
+            });
+
+        }
+
+        $( document ).ready(function() {
+            $("a.saveStationAsRead").click(function(){
+                saveStationAsRead($(this));
+            });
+        });
+    </script>
+{% endblock %}

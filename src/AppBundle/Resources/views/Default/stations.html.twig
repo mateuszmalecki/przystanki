@@ -1,0 +1,87 @@
+{% extends "AppBundle::base.html.twig" %}
+{% block content %}
+<div class="container">
+    {% include 'AppBundle:Extra:flashMsg.html.twig' %}
+    <div class="well well-sm"><strong>Opis podstrony:</strong><br>
+        Wyświetlona została mapa z markerami, wskazującymi pozycję przystanku (pole address), o ile Geocoder Google rozpozna pozycję na podstawie wpisanego tekstu.<br>Po prawej stronie znajduje się tabela z danymi przystanków. W przyszłości można dodać informację o odległości między przystankiem, a siedzibą firmy.
+    </div>
+    <div class="titleSection">
+        <p>Przystanki</p>
+    </div>
+    <div class="col-md-12 blueBox">
+        <div class="row">
+            <div class="col-md-6"><h2 class="titleBox">Mapa</h2>
+                <div id="map"></div>
+            </div>
+            <div class="col-md-6"><h2 class="titleBox">Lista przystanków ({{ stations|length }})</h2>
+                <table class="table table-bordered ">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tytuł</th>
+                        <th>Adres</th>
+                        <th>Opis</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for station in stations %}
+                        <tr>
+                            <td>{{ station.id }}</td>
+                            <td>{{ station.title }}</td>
+                            <td>{{ station.address }}</td>
+                            <td>{{ station.description }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+{{ parent() }}
+    <script>
+        var map, geocoder;
+        var markersOnMap = [];
+        var bounds;
+        var addresses = "{% for station in stations %}{{ station.address }}|{% endfor %}";
+        addressesArray = addresses.split("|");
+        var locations = addressesArray.filter(function (el) {return el != null && el != "";});
+
+        function initMap() {
+            geocoder = new google.maps.Geocoder();
+            bounds = new google.maps.LatLngBounds();
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: -34.397, lng: 150.644},
+                zoom: 8
+            });
+
+            var marker, i;
+            for (i = 0; i < locations.length; i++) {
+                geocoder.geocode( { 'address': locations[i]}, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        map.setCenter(results[0].geometry.location);
+                        var marker = new google.maps.Marker({
+                            map: map,
+                            position: results[0].geometry.location
+                        });
+                        bounds.extend(results[0].geometry.location);
+                    } else {
+                        console.log("Nie znaleziono pozycji przystanku.");
+                    }
+                });
+
+                marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                    map: map
+                });
+            }
+
+            map.fitBounds(bounds);
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCe88HrCkem5wdqCGa5kuMBHgqbG8jbkfw&callback=initMap"
+            async defer></script>
+{% endblock %}

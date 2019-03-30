@@ -1,0 +1,98 @@
+{% extends "AppBundle::base.html.twig" %}
+{% block content %}
+<div class="container">
+    {% include 'AppBundle:Extra:flashMsg.html.twig' %}
+
+    <div class="well well-sm"><strong>Opis podstrony:</strong><br>
+        Wyświetlony został formularz dodawania przystanku (StationType). Dodatkowo umieszono mapę, na której po wpisaniu adresu przystanku i kliknięciu przycisku "Sprawdź wpisany adres" zostaje wyświetlony marker w pozycji wybranej przez użytkownika. W przyszłości można pozwolić użytkownikowi na przesuwanie markera po mapie i w ten sposób wybór adresu.
+    </div>
+    <div class="titleSection">
+        <p>Dodaj nowy przystanek</p>
+    </div>
+    <div class="col-md-12 blueBox2">
+        <div class="row">
+            <div class="col-md-6"><h2 class="titleBox">Mapa</h2>
+                <div id="map2"></div>
+            </div>
+            <div class="col-md-6">
+                <h2 class="titleBox">Dodaj przystanek</h2>
+                {% form_theme form 'bootstrap_3_layout.html.twig' %}
+                {{ form_start(form) }}
+
+                {{ form_label(form.title) }}
+                {{ form_errors(form.title) }}
+                {{ form_widget(form.title) }}
+
+                <div class="row">
+                    <div class="col-md-8">
+                        {{ form_label(form.address) }}
+                        {{ form_errors(form.address) }}
+                        {{ form_widget(form.address) }}
+                    </div>
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-default pull-right" onclick="checkAddress()">Sprawdź wpisany adres</button>
+                    </div>
+                </div>
+
+                {{ form_label(form.description) }}
+                {{ form_errors(form.description) }}
+                {{ form_widget(form.description) }}
+
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+{{ parent() }}
+    <script>
+        var map, geocoder;
+        var markers = [];
+
+        function initMap() {
+            geocoder = new google.maps.Geocoder();
+            map = new google.maps.Map(document.getElementById('map2'), {
+                center: {lat: 50.092024, lng: 18.0985553},
+                zoom: 14
+            });
+        }
+
+        function setMapOnAll(map) {
+            for (var i = 0; i < markers.length; i++) {
+                markers[i].setMap(map);
+            }
+        }
+
+        function deleteMarkers() {
+            setMapOnAll(null);
+            markers = [];
+        }
+
+        function checkAddress() {
+            deleteMarkers();
+            var addressFromForm = $('#appbundle_station_address').val();
+            if(!addressFromForm){
+                alert("Nie wprowadzono żadnego adresu.");
+                return false;
+            }else{
+                geocoder.geocode({'address': addressFromForm}, function(results, status) {
+                    if (status === 'OK') {
+                        map.setCenter(results[0].geometry.location);
+                        var marker = new google.maps.Marker({
+                            map: map,
+                            position: results[0].geometry.location
+                        });
+                        markers.push(marker);
+                    } else {
+                        alert('Geocode was not successful for the following reason: ' + status);
+                    }
+                });
+            }
+        }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCe88HrCkem5wdqCGa5kuMBHgqbG8jbkfw&callback=initMap"
+            async defer></script>
+{% endblock %}

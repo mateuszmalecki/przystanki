@@ -1,0 +1,196 @@
+body{
+    font-family: Lato;
+}
+
+.carousel-inner img.slideIMG{
+    width: 100%;
+    object-fit: cover;
+    height: 300px;
+}
+
+a:hover, a, a:active{
+    text-decoration: none!important;
+}
+
+.firstBox{
+    background: #00a1ff;
+    color: white;
+    font-family: Lato;
+}
+
+.secondBox{
+    background: #0885ce;
+    color: white;
+    font-family: Lato;
+}
+.thirdBox{
+    background: #05679f;
+    color: white;
+    font-family: Lato;
+}
+
+.firstBox a, .secondBox a, .thirdBox a{
+    float: right;
+    margin: 5px 0px 10px 0px;
+}
+
+.navbar-inverse {
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
+
+.navbar-inverse {
+    background-image: -webkit-linear-gradient(top,#3c3c3c 0,#222 100%);
+    background-image: -o-linear-gradient(top,#3c3c3c 0,#222 100%);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#2e6da4),to(#222));
+    background-image: linear-gradient(to bottom,#2e6da4 0,#5bc0de 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3c3c3c', endColorstr='#ff222222', GradientType=0);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    border-radius: 4px;
+}
+
+.navbar-inverse .navbar-brand {
+    color: #ffffff;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+    color: #ffffff;
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: 1px;
+    font-size: 11px;
+}
+
+.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.open>a {
+    background-image: -webkit-linear-gradient(top,#2e6da4 0,#337ab7 100%);
+    background-image: -o-linear-gradient(top,#2e6da4 0,#337ab7 100%);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#2e6da4),to(#337ab7));
+    background-image: linear-gradient(to bottom,#2e6da4 0,#337ab7 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#2e6da4', endColorstr='#337ab7', GradientType=0);
+    background-repeat: repeat-x;
+    -webkit-box-shadow: inset 0 3px 9px rgba(0,0,0,.25);
+    box-shadow: inset 0 3px 9px rgba(0,0,0,.25);
+}
+
+ul.files{
+    list-style-type: none;
+    padding: 0;
+}
+
+.form-control{
+    margin-bottom: 10px;
+}
+
+.blueBox{
+    background: #00a1ff;
+    color: white;
+    font-family: Lato;
+    padding-bottom: 20px;
+}
+
+.blueBox2{
+    background: #0885ce;
+    color: white;
+    font-family: Lato;
+    padding-bottom: 20px;
+}
+
+.blueBox3{
+    background: #0885ce;
+    font-family: Lato;
+    padding-bottom: 20px;
+}
+
+.blueBox3 h2{
+    color: white;
+}
+
+@media (min-width: 768px){
+    .navbar-nav {
+        float: right;
+        margin: 0;
+    }
+}
+
+#map {
+    width: 100%;
+    min-height: 350px;
+}
+
+#map2 {
+    width: 100%;
+    min-height: 250px;
+}
+
+footer{
+    background: #0c537c;
+    padding: 10px;
+    color: white;
+    text-align: right;
+}
+
+footer p{
+    margin: 0;
+}
+
+h2.titleBox{
+    background: #0c537c;
+    margin-bottom: 0;
+    padding: 10px 5px;
+    text-align: center;
+    font-size: 20px;
+}
+
+.btn{
+    border-radius: 0;
+}
+
+.firstBox p, .secondBox p, .thirdBox p{
+    margin: 0;
+    padding: 10px 10px;
+}
+
+.panel.panel-default.panel-info, .panel.panel-default {
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+}
+
+.panel-group .panel+.panel {
+    margin-top: 0px;
+}
+
+textarea#appbundle_station_description, input#appbundle_station_address, input#appbundle_station_title{
+    border-radius: 0;
+}
+
+form[name="appbundle_station"]{
+    background: #8fbed1;
+    padding: 10px;
+}
+
+thead tr{
+    background: #05679f;
+}
+
+thead tr th{
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 14px;
+    color: white;
+}
+
+.titleSection{
+    background: #0c537c;
+    margin-bottom: 0;
+    padding: 10px 5px;
+    text-align: center;
+}
+
+.titleSection p{
+    margin: 0;
+    color: white;
+    font-size: 25px;
+}
