@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="275234df-6395-4e6d-8b9b-1baa05a54845" name="przystanki.vot.pl" url="http://s64.linuxpl.com">
+        <fileTransfer host="s64.linuxpl.com" port="59184" rootFolder="/home/matmal98/domains/przystanki.vot.pl" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="59184" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
