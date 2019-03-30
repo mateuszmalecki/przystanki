@@ -49,6 +49,13 @@ class Station
     private $user_id = 1;
 
     /**
+     * @var string
+     * @ORM\Column(name="image", type="string", length=255, nullable = true)
+     * @Assert\Image()
+     */
+    private $image = null;
+
+    /**
      * Get id
      *
      * @return integer
@@ -209,4 +216,28 @@ class Station
 
 
 
+
+    /**
+     * Set image
+     *
+     * @param string $image
+     *
+     * @return Station
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
 }

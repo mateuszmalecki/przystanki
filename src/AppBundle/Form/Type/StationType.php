@@ -46,6 +46,11 @@ class StationType extends AbstractType
                 )
             ))
 
+            ->add('image', FileType::class, array(
+                'label' => "Dodaj plik",
+                'required' => false
+            ))
+
             ->add('save', SubmitType::class, array(
                 'label' => 'Dodaj przystanek',
                 'attr' => array('class' => 'btn btn-block btn-primary'),

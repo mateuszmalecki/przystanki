@@ -67,6 +67,18 @@ class DefaultController extends Controller
                 try{
                     $Station = $StationForm->getData();
 
+                    if($Station->getImage()){
+                        $file = $Station->getImage();
+                        $fileName = md5(uniqid()).'.'.$file->guessExtension();
+
+                        $file->move(
+                            $this->getParameter('image_directory'), $fileName
+                        );
+
+                        $Station->setImage($fileName);
+                    }
+
+
                     $entityManager = $this->getDoctrine()->getManager();
                     $entityManager->persist($Station);
                     $entityManager->flush();
