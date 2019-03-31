@@ -1,15 +1,11 @@
 <?php
-
 namespace AppBundle\Controller;
-
 use AppBundle\Entity\Station;
 use AppBundle\Form\Type\StationType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
-
 
 class DefaultController extends Controller
 {
@@ -59,30 +55,30 @@ class DefaultController extends Controller
 
         $StationForm = $this->createForm(StationType::class, $Station);
 
-        $StationForm->handleRequest($Request);
-
         if($Request->isMethod('POST')){
+            $StationForm->handleRequest($Request);
             if($StationForm->isValid()){
-
                 try{
                     $Station = $StationForm->getData();
-
-                    if($Station->getImage()){
-                        $file = $Station->getImage();
-                        $fileName = md5(uniqid()).'.'.$file->guessExtension();
-
-                        $file->move(
-                            $this->getParameter('image_directory'), $fileName
-                        );
-
-                        $Station->setImage($fileName);
+                    $attachments = $Station->getFiles();
+                    if ($attachments) {
+                        foreach($attachments as $key => $attachment)
+                        {
+                            if($attachment->getFile() != NULL){
+                                $file = $attachment->getFile();
+                                $filename = md5(uniqid()) . '.' .$file->guessExtension();
+                                $file->move(
+                                    $this->getParameter('image_directory'), $filename
+                                );
+                                $attachment->setFile($filename);
+                            }else{
+                                unset($attachments[$key]);
+                            }
+                        }
                     }
-
-
                     $entityManager = $this->getDoctrine()->getManager();
                     $entityManager->persist($Station);
                     $entityManager->flush();
-
                     $this->get('session')->getFlashBag()->add('success', 'Dodałeś nowy przystanek.');
                     return $this->redirect($this->generateUrl('stations'));
                 } catch (UserException $ex) {
@@ -90,7 +86,6 @@ class DefaultController extends Controller
                 }
             }
         }
-
         return array(
             'form' => $StationForm->createView()
         );

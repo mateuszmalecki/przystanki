@@ -13,14 +13,14 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Valid;
+use Symfony\Component\Validator\Constraints\File;
 
 class StationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
-        $questionId = $builder->getData()->getId();
-
         $builder
             ->add('title', TextType::class, array(
                 'label' => false,
@@ -28,6 +28,10 @@ class StationType extends AbstractType
                 'attr' => array(
                     'readonly' => true,
                 )
+            ))
+            ->add('user_id', TextType::class, array(
+                'label' => 'Identyfikator zgłaszającego',
+                'data' => '1',
             ))
 
             ->add('address', TextType::class, array(
@@ -46,9 +50,13 @@ class StationType extends AbstractType
                 )
             ))
 
-            ->add('image', FileType::class, array(
-                'label' => "Dodaj plik",
-                'required' => false
+            ->add('files', CollectionType::class,array(
+                'entry_type' => FilesType::class,
+                'label' => false,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'delete_empty' => true,
+                'by_reference' => false
             ))
 
             ->add('save', SubmitType::class, array(

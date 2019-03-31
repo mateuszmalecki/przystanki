@@ -165,7 +165,7 @@ h2.titleBox{
     margin-top: 0px;
 }
 
-textarea#appbundle_station_description, input#appbundle_station_address, input#appbundle_station_title{
+textarea#appbundle_station_description, input#appbundle_station_address, input#appbundle_station_title, input#appbundle_station_user_id{
     border-radius: 0;
 }
 
@@ -204,5 +204,38 @@ thead tr th{
     margin-top: 5px;
     margin-bottom: 10px;
     color: #613535;
+}
+
+table.stationsList td {
+    color: #0c537c;
+}
+
+@media only screen and (max-width: 768px)  {
+    .navbar-brand{
+        font-size: 14px;
+    }
+
+    .firstBox, .secondBox, .thirdBox{
+        padding: 0px;
+    }
+
+    .firstBox a, .secondBox a, .thirdBox a{
+        float: none;
+    }
+
+    .blueBox button{
+        width: 100%;
+        margin-top: -10px;
+        margin-bottom: 10px;
+    }
+
+    h2.titleBox{
+        margin: 0px;
+    }
+
+    .blueBox{
+        padding-top: 10px;
+    }
+
 }
 

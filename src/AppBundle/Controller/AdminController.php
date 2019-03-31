@@ -1,7 +1,5 @@
 <?php
-
 namespace AppBundle\Controller;
-
 use AppBundle\Entity\Station;
 use AppBundle\Form\Type\StationType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

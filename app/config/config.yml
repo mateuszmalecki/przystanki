@@ -81,9 +81,10 @@ doctrine_migrations:
     table_name: migration_versions
     name: Application Migrations
 
-vich_uploader:
-    db_driver: orm # or mongodb or propel or phpcr
-    mappings:
-        station_image:
-            uri_prefix: /images/stations
-            upload_destination: '%kernel.project_dir%/images/stations'
+fos_user:
+    db_driver: orm # other valid values are 'mongodb' and 'couchdb'
+    firewall_name: main
+    user_class: AppBundle\Entity\User
+    from_email:
+        address: "%mailer_user%"
+        sender_name: "%mailer_user%"

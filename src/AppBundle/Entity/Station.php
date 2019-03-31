@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-
 /**
  * @ORM\Table(name="station")
  * @ORM\Entity()
@@ -44,62 +43,39 @@ class Station
     protected $isRead = false;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="text")
      */
-    private $user_id = 1;
+    private $user_id;
 
     /**
-     * @var string
-     * @ORM\Column(name="image", type="string", length=255, nullable = true)
-     * @Assert\Image()
+     * @ORM\OneToMany(targetEntity="Files", cascade={"persist"}, mappedBy="station")
+     * @Assert\Valid
+     * @Assert\Count(
+     *      max = 3,
+     *      maxMessage = "Możesz dodać maksymalnie {{ limit }} pliki"
+     * )
      */
-    private $image = null;
+    private $files;
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set title
-     *
-     * @param string $title
-     *
-     * @return Station
-     */
     public function setTitle($title)
     {
         if($title == null){
             $title = "Zaproponuj przystanek";
         }
-
         $this->title = $title;
-
         return $this;
     }
 
-    /**
-     * Get title
-     *
-     * @return string
-     */
     public function getTitle()
     {
         return $this->title;
     }
 
-    /**
-     * Set description
-     *
-     * @param string $description
-     *
-     * @return Station
-     */
     public function setDescription($description)
     {
         $this->description = $description;
@@ -107,23 +83,11 @@ class Station
         return $this;
     }
 
-    /**
-     * Get description
-     *
-     * @return string
-     */
     public function getDescription()
     {
         return $this->description;
     }
 
-    /**
-     * Set address
-     *
-     * @param string $address
-     *
-     * @return Station
-     */
     public function setAddress($address)
     {
         $this->address = $address;
@@ -131,23 +95,11 @@ class Station
         return $this;
     }
 
-    /**
-     * Get address
-     *
-     * @return string
-     */
     public function getAddress()
     {
         return $this->address;
     }
 
-    /**
-     * Set read
-     *
-     * @param boolean $read
-     *
-     * @return Station
-     */
     public function setRead($read)
     {
         $this->read = $read;
@@ -155,89 +107,60 @@ class Station
         return $this;
     }
 
-    /**
-     * Get read
-     *
-     * @return boolean
-     */
     public function getRead()
     {
         return $this->read;
     }
 
-    /**
-     * Set userId
-     *
-     * @param integer $userId
-     *
-     * @return Station
-     */
     public function setUserId($userId)
     {
-        $this->user_id = $userId;
+        if($userId){
+            $this->user_id = $userId;
+        }else{
+            $this->user_id = 1;
+        }
+
+
 
         return $this;
     }
 
-    /**
-     * Get userId
-     *
-     * @return integer
-     */
     public function getUserId()
     {
         return $this->user_id;
     }
 
-    /**
-     * Set isRead
-     *
-     * @param boolean $isRead
-     *
-     * @return Station
-     */
     public function setIsRead($isRead)
     {
         $this->isRead = $isRead;
-
         return $this;
     }
 
-    /**
-     * Get isRead
-     *
-     * @return boolean
-     */
     public function getIsRead()
     {
         return $this->isRead;
     }
 
-
-
-
-
-    /**
-     * Set image
-     *
-     * @param string $image
-     *
-     * @return Station
-     */
-    public function setImage($image)
+    public function __construct()
     {
-        $this->image = $image;
+        $this->files = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function addFile(\AppBundle\Entity\Files $file)
+    {
+        $file->setStation($this);
+        $this->files[] = $file;
 
         return $this;
     }
 
-    /**
-     * Get image
-     *
-     * @return string
-     */
-    public function getImage()
+    public function removeFile(\AppBundle\Entity\Files $file)
     {
-        return $this->image;
+        $this->files->removeElement($file);
+    }
+
+    public function getFiles()
+    {
+        return $this->files;
     }
 }

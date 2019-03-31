@@ -2,9 +2,8 @@
 {% block content %}
 <div class="container">
     {% include 'AppBundle:Extra:flashMsg.html.twig' %}
-
     <div class="well well-sm"><strong>Opis podstrony:</strong><br>
-        Wyświetlony został formularz dodawania przystanku (StationType). Dodatkowo umieszono mapę, na której po wpisaniu adresu przystanku i kliknięciu przycisku "Sprawdź wpisany adres" zostaje wyświetlony marker w pozycji wybranej przez użytkownika. W przyszłości można pozwolić użytkownikowi na przesuwanie markera po mapie i w ten sposób wybór adresu.
+        Wyświetlony został formularz dodawania przystanku (StationType). Dodatkowo umieszono mapę, na której po wpisaniu adresu przystanku i kliknięciu przycisku "Sprawdź wpisany adres" zostaje wyświetlony marker w pozycji wybranej przez użytkownika. W przyszłości można pozwolić użytkownikowi na przesuwanie markera po mapie i w ten sposób wybór adresu. W celu dodawania plików w wersji rozszerzonej wybrałbym VichUploaderBundle i SymfonyCollections.
     </div>
     <div class="titleSection">
         <p>Dodaj nowy przystanek</p>
@@ -18,10 +17,13 @@
                 <h2 class="titleBox">Dodaj przystanek</h2>
                 {% form_theme form 'bootstrap_3_layout.html.twig' %}
                 {{ form_start(form) }}
-
                 {{ form_label(form.title) }}
                 {{ form_errors(form.title) }}
                 {{ form_widget(form.title) }}
+
+                {{ form_label(form.user_id) }}
+                {{ form_errors(form.user_id) }}
+                {{ form_widget(form.user_id) }}
 
                 <div class="row">
                     <div class="col-md-8">
@@ -33,11 +35,23 @@
                         <button type="button" class="btn btn-default pull-right" onclick="checkAddress()">Sprawdź wpisany adres</button>
                     </div>
                 </div>
-
                 {{ form_label(form.description) }}
                 {{ form_errors(form.description) }}
                 {{ form_widget(form.description) }}
 
+
+                <p>Możesz dodać maksymalnie 3 pliki. Dozwolone rozszerzenia: .jpg, .jpeg, .png</p>
+
+                {{ form_errors(form.files) }}
+                <ul class="files" data-prototype="{{ form_widget(form.files.vars.prototype)|e('html_attr') }}">
+                    {% for element in form.files %}
+                        <li>
+                            {{ form_errors(element.file) }}
+                            {{ form_widget(element.file) }}
+                        </li>
+                    {% endfor %}
+                </ul>
+                {{ form_errors(form) }}
                 {{ form_rest(form) }}
                 {{ form_end(form) }}
             </div>
@@ -50,7 +64,6 @@
     <script>
         var map, geocoder;
         var markers = [];
-
         function initMap() {
             geocoder = new google.maps.Geocoder();
             map = new google.maps.Map(document.getElementById('map2'), {
@@ -58,18 +71,15 @@
                 zoom: 14
             });
         }
-
         function setMapOnAll(map) {
             for (var i = 0; i < markers.length; i++) {
                 markers[i].setMap(map);
             }
         }
-
         function deleteMarkers() {
             setMapOnAll(null);
             markers = [];
         }
-
         function checkAddress() {
             deleteMarkers();
             var addressFromForm = $('#appbundle_station_address').val();
@@ -86,13 +96,34 @@
                         });
                         markers.push(marker);
                     } else {
-                        alert('Geocode was not successful for the following reason: ' + status);
+                        alert('Przykro nam, ale nie udało się odszyfrować podanego adresu.');
                     }
                 });
             }
         }
-
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCe88HrCkem5wdqCGa5kuMBHgqbG8jbkfw&callback=initMap"
             async defer></script>
+    <script lang="javascript" type="text/javascript">
+        var $collectionHolder;
+        var $addTagLink = $('<a href="#" class="add_tag_link btn btn-primary">Dodaj plik</a>');
+        var $newLinkLi = $('<li></li>').append($addTagLink);
+        jQuery(document).ready(function () {
+            $collectionHolder = $('ul.files');
+            $collectionHolder.append($newLinkLi);
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+            $addTagLink.on('click', function (e) {
+                e.preventDefault();
+                addTagForm($collectionHolder, $newLinkLi);
+            });
+        });
+        function addTagForm($collectionHolder, $newLinkLi) {
+            var prototype = $collectionHolder.data('prototype');
+            var index = $collectionHolder.data('index');
+            var newForm = prototype.replace(/__name__/g, index);
+            $collectionHolder.data('index', index + 1);
+            var $newFormLi = $('<li></li>').append(newForm);
+            $newLinkLi.before($newFormLi);
+        }
+    </script>
 {% endblock %}
