@@ -19,12 +19,11 @@ class AdminController extends Controller
      */
     public function panelAction(Request $request)
     {
-        $StationRepo = $this->getDoctrine()->getRepository('AppBundle:Station');
-        $Stations = $StationRepo->findBy(array(), array(
+        $stationsRepo = $this->getDoctrine()->getRepository('AppBundle:Station');
+        $stations = $stationsRepo->findBy(array(), array(
             'id' => 'DESC'
         ));
-
-        return array('stations' => $Stations);
+        return array('stations' => $stations);
     }
 
     /**
@@ -33,19 +32,17 @@ class AdminController extends Controller
     public function setStationAsRead(Request $request)
     {
         $stationId = $request->request->get('stationId');
+        $stationRepo = $this->getDoctrine()->getRepository('AppBundle:Station');
+        $station = $stationRepo->findOneById($stationId);
 
-        $StationRepo = $this->getDoctrine()->getRepository('AppBundle:Station');
-        $Station = $StationRepo->findOneById($stationId);
-
-        if(null === $Station){
+        if(null === $station){
             return new JsonResponse(array('status' => 'error'));
         }else{
-            $Station->setIsRead(1);
+            $station->setIsRead(1);
             $em = $this->getDoctrine()->getManager();
-            $em->persist($Station);
+            $em->persist($station);
             $em->flush();
             return new JsonResponse(array('status' => 'ok'));
         }
     }
-
 }

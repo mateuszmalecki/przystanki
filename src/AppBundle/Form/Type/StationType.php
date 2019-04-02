@@ -24,6 +24,7 @@ class StationType extends AbstractType
         $builder
             ->add('title', TextType::class, array(
                 'label' => false,
+                'required' => false,
                 'data' => 'Zaproponuj przystanek',
                 'attr' => array(
                     'readonly' => true,
@@ -32,6 +33,7 @@ class StationType extends AbstractType
             ->add('user_id', TextType::class, array(
                 'label' => 'Identyfikator zgłaszającego',
                 'data' => '1',
+                'required' => false
             ))
 
             ->add('address', TextType::class, array(

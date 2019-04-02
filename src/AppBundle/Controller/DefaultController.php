@@ -24,12 +24,10 @@ class DefaultController extends Controller
      */
     public function stationsAction(Request $request)
     {
-        $StationRepo = $this->getDoctrine()->getRepository('AppBundle:Station');
-        $Stations = $StationRepo->findBy(array(), array(
-            'id' => 'DESC'
-        ));
+        $stationRepo = $this->getDoctrine()->getRepository('AppBundle:Station');
+        $stations = $stationRepo->findBy(array(), array('id' => 'DESC'));
 
-        return array('stations' => $Stations);
+        return array('stations' => $stations);
     }
 
     /**
@@ -38,29 +36,28 @@ class DefaultController extends Controller
      */
     public function mapAction(Request $request)
     {
-        $StationRepo = $this->getDoctrine()->getRepository('AppBundle:Station');
-        $Stations = $StationRepo->findAll();
-
-        return array('stations' => $Stations);
+        $stationRepo = $this->getDoctrine()->getRepository('AppBundle:Station');
+        $stations = $stationRepo->findAll();
+        return array('stations' => $stations);
     }
 
     /**
      * @Route("/dodaj-przystanek", name="addStation")
      * @Template("AppBundle:Default:add_station.html.twig")
      */
-    public function addStationAction(Request $Request)
+    public function addStationAction(Request $request)
     {
-        $StationRepo = $this->getDoctrine()->getRepository('AppBundle:Station');
-        $Station = new Station();
+        $stationRepo = $this->getDoctrine()->getRepository('AppBundle:Station');
+        $station = new Station();
 
-        $StationForm = $this->createForm(StationType::class, $Station);
+        $stationForm = $this->createForm(StationType::class, $station);
 
-        if($Request->isMethod('POST')){
-            $StationForm->handleRequest($Request);
-            if($StationForm->isValid()){
+        if($request->isMethod('POST')){
+            $stationForm->handleRequest($request);
+            if($stationForm->isValid()){
                 try{
-                    $Station = $StationForm->getData();
-                    $attachments = $Station->getFiles();
+                    $station = $stationForm->getData();
+                    $attachments = $station->getFiles();
                     if ($attachments) {
                         foreach($attachments as $key => $attachment)
                         {
@@ -76,8 +73,9 @@ class DefaultController extends Controller
                             }
                         }
                     }
+
                     $entityManager = $this->getDoctrine()->getManager();
-                    $entityManager->persist($Station);
+                    $entityManager->persist($station);
                     $entityManager->flush();
                     $this->get('session')->getFlashBag()->add('success', 'Dodałeś nowy przystanek.');
                     return $this->redirect($this->generateUrl('stations'));
@@ -87,7 +85,7 @@ class DefaultController extends Controller
             }
         }
         return array(
-            'form' => $StationForm->createView()
+            'form' => $stationForm->createView()
         );
     }
 }

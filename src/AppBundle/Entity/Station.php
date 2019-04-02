@@ -21,15 +21,14 @@ class Station
     private $id;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable = true)
      */
     private $title = "Zaproponuj przystanek";
 
     /**
-     * @ORM\Column(type="text")
-     * @Assert\NotBlank(message="Musisz uzupełnić opis przystanku.")
+     * @ORM\Column(type="text", nullable = true)
      */
-    private $description;
+    private $description = null;
 
     /**
      * @ORM\Column(type="text")
