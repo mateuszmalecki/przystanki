@@ -1,0 +1,12 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: matmal98_bus
+    database_user: matmal98_bus
+    database_password: '1E1@#4i2+8E$cB;'
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: testowyuser@gmail.com
+    mailer_password: 123321
+    secret: 68ee068b4981d09b5ab8412aa14fc55f1dbea6d5
